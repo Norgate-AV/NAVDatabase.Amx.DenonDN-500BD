@@ -4,6 +4,7 @@ MODULE_NAME='mDenonDN-500BD'	(
                                 )
 
 (***********************************************************)
+#DEFINE USING_NAV_MODULE_BASE_CALLBACKS
 #DEFINE USING_NAV_MODULE_BASE_PROPERTY_EVENT_CALLBACK
 #DEFINE USING_NAV_MODULE_BASE_PASSTHRU_EVENT_CALLBACK
 #include 'NAVFoundation.ModuleBase.axi'
@@ -50,10 +51,13 @@ DEFINE_DEVICE
 (***********************************************************)
 DEFINE_CONSTANT
 
-constant long TL_IP_CHECK = 1
+constant long TL_SOCKET_CHECK = 1
 constant long TL_HEARTBEAT = 3
 
-constant integer IP_PORT = NAV_TELNET_PORT
+constant long TL_SOCKET_CHECK_INTERVAL[] = { 3000 }
+constant long TL_HEARTBEAT_INTERVAL[] = { 20000 }
+
+constant integer IP_PORT = 9030
 
 (***********************************************************)
 (*              DATA TYPE DEFINITIONS GO BELOW             *)
@@ -64,9 +68,6 @@ DEFINE_TYPE
 (*               VARIABLE DEFINITIONS GO BELOW             *)
 (***********************************************************)
 DEFINE_VARIABLE
-
-volatile long ipCheck[] = { 3000 }
-volatile long heartbeat[] = { 20000 }
 
 volatile integer trayState
 
@@ -85,9 +86,12 @@ DEFINE_MUTUALLY_EXCLUSIVE
 (***********************************************************)
 (* EXAMPLE: DEFINE_FUNCTION <RETURN_TYPE> <NAME> (<PARAMETERS>) *)
 (* EXAMPLE: DEFINE_CALL '<NAME>' (<PARAMETERS>) *)
+
 define_function SendString(char payload[]) {
-    payload = "payload, NAV_CR"
-    NAVLog(NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_STRING_TO, dvPort, payload))
+    NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
+                NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_STRING_TO,
+                                            dvPort,
+                                            payload))
 
     send_string dvPort, "payload"
 }
@@ -98,7 +102,7 @@ define_function char[NAV_MAX_BUFFER] BuildString(char message[]) {
 }
 
 
-define_function MaintainIpConnection() {
+define_function MaintainSocketConnection() {
     if (module.Device.SocketConnection.IsConnected) {
         return
     }
@@ -123,9 +127,9 @@ define_function char[NAV_MAX_CHARS] GetBaudRate(integer port) {
 define_function NAVModulePropertyEventCallback(_NAVModulePropertyEvent event) {
     switch (event.Name) {
         case NAV_MODULE_PROPERTY_EVENT_IP_ADDRESS: {
-            module.Device.SocketConnection.Address = event.Args[1]
+            module.Device.SocketConnection.Address = NAVTrimString(event.Args[1])
             module.Device.SocketConnection.Port = IP_PORT
-            NAVTimelineStart(TL_IP_CHECK, ipCheck, TIMELINE_ABSOLUTE, TIMELINE_REPEAT)
+            NAVTimelineStart(TL_SOCKET_CHECK, TL_SOCKET_CHECK_INTERVAL, TIMELINE_ABSOLUTE, TIMELINE_REPEAT)
         }
     }
 }
@@ -133,8 +137,12 @@ define_function NAVModulePropertyEventCallback(_NAVModulePropertyEvent event) {
 
 
 #IF_DEFINED USING_NAV_MODULE_BASE_PASSTHRU_EVENT_CALLBACK
-define_function NAVModulePassthruEventCallback(char data[]) {
-    SendString(data)
+define_function NAVModulePassthruEventCallback(_NAVModulePassthruEvent event) {
+    if (event.Device != vdvObject) {
+        return
+    }
+
+    SendString("event.Payload, NAV_CR")
 }
 #END_IF
 
@@ -183,35 +191,48 @@ data_event[dvPort] {
 
         if (data.device.number == 0) {
             module.Device.SocketConnection.IsConnected = true
+            NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mDenonDN-500BD => Socket Online'")
         }
 
-        NAVTimelineStart(TL_HEARTBEAT, heartbeat, TIMELINE_ABSOLUTE, TIMELINE_REPEAT)
+        NAVTimelineStart(TL_HEARTBEAT, TL_HEARTBEAT_INTERVAL, TIMELINE_ABSOLUTE, TIMELINE_REPEAT)
     }
     string: {
         [vdvObject, DATA_INITIALIZED] = true
 
         CommunicationTimeOut(30)
 
-        NAVLog(NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_STRING_FROM, data.device.port, data.text))
+        NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
+                    NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_STRING_FROM,
+                                                data.device,
+                                                data.text))
     }
     offline: {
         if (data.device.number == 0) {
             NAVClientSocketClose(data.device.port)
             Reset()
+
+            NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mDenonDN-500BD => Socket Offline'")
         }
     }
     onerror: {
         if (data.device.number == 0) {
             Reset()
+
+            NAVErrorLog(NAV_LOG_LEVEL_ERROR,
+                        "'mDenonDN-500BD => Socket Error: ', NAVGetSocketError(type_cast(data.number))")
         }
     }
 }
+
 
 data_event[vdvObject] {
     command: {
         stack_var _NAVSnapiMessage message
 
-        NAVLog(NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_COMMAND_FROM, data.device, data.text))
+        NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
+                    NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_COMMAND_FROM,
+                                                data.device,
+                                                data.text))
 
         NAVParseSnapiMessage(data.text, message)
 
@@ -224,37 +245,37 @@ data_event[vdvObject] {
 }
 
 
-channel_event[vdvObject,0] {
+channel_event[vdvObject, 0] {
     on: {
         switch (channel.channel) {
-            case PLAY: SendString("'2353'")
-            case STOP: SendString("'2354'")
-            case PAUSE: SendString("'2348'")
-            case FFWD: SendString("'PCSLSFf'")
-            case REW: SendString("'PCSLSRf'")
-            case SFWD: SendString("'2332'")
-            case SREV: SendString("'2333'")
+            case PLAY: SendString(BuildString('2353'))
+            case STOP: SendString(BuildString('2354'))
+            case PAUSE: SendString(BuildString('2348'))
+            case FFWD: SendString(BuildString('PCSLSFf'))
+            case REW: SendString(BuildString('PCSLSRf'))
+            case SFWD: SendString(BuildString('2332'))
+            case SREV: SendString(BuildString('2333'))
             //case POWER: SendString("'800'")
-            case PWR_ON: SendString("'PW00'")
-            case PWR_OFF: SendString("'PW01'")
-            case MENU_UP: SendString("'PCCUSR3'")
-            case MENU_DN: SendString("'PCCUSR4'")
-            case MENU_LT: SendString("'PCCUSR1'")
-            case MENU_RT: SendString("'PCCUSR2'")
-            case MENU_SELECT: SendString("'PCENTR'")
-            case MENU_BACK: SendString("'PCRTN'")
-            case 44: { SendString("'DVTP'") }	//Top Menu
-            case 57: { SendString("'DVSPTL1'") }	//Sub-title
-            case 101: { SendString("'PCHM'") }	//Home
-            case 102: { SendString("'DVPU'") }	//popup menu
+            case PWR_ON: SendString(BuildString('PW00'))
+            case PWR_OFF: SendString(BuildString('PW01'))
+            case MENU_UP: SendString(BuildString('PCCUSR3'))
+            case MENU_DN: SendString(BuildString('PCCUSR4'))
+            case MENU_LT: SendString(BuildString('PCCUSR1'))
+            case MENU_RT: SendString(BuildString('PCCUSR2'))
+            case MENU_SELECT: SendString(BuildString('PCENTR'))
+            case MENU_BACK: SendString(BuildString('PCRTN'))
+            case 44: { SendString(BuildString('DVTP')) }	//Top Menu
+            case 57: { SendString(BuildString('DVSPTL1')) }	//Sub-title
+            case 101: { SendString(BuildString('PCHM')) }	//Home
+            case 102: { SendString(BuildString('DVPU')) }	//popup menu
             case DISC_TRAY: {
                 trayState = !trayState
 
                 if (trayState) {
-                    SendString("'PCDTRYOP'")
+                    SendString(BuildString('PCDTRYOP'))
                 }
                 else {
-                    SendString("'PCDTRYCL'")
+                    SendString(BuildString('PCDTRYCL'))
                 }
             }
         }
@@ -262,11 +283,11 @@ channel_event[vdvObject,0] {
 }
 
 
-timeline_event[TL_IP_CHECK] { MaintainIPConnection() }
+timeline_event[TL_SOCKET_CHECK] { MaintainSocketConnection() }
 
 
 timeline_event[TL_HEARTBEAT] {
-    // SendString('')
+    SendString(BuildString('?VN'))
 }
 
 
@@ -280,4 +301,3 @@ timeline_event[TL_NAV_FEEDBACK] {
 (*                     END OF PROGRAM                      *)
 (*        DO NOT PUT ANY CODE BELOW THIS COMMENT           *)
 (***********************************************************)
-
