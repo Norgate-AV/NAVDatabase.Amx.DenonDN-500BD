@@ -8,8 +8,8 @@ importers:
   .:
     devDependencies:
       "@commitlint/cli":
-        specifier: ^19.6.0
-        version: 19.6.0(@types/node@22.10.2)(typescript@5.2.2)
+        specifier: ^19.6.1
+        version: 19.6.1(@types/node@22.10.2)(typescript@5.2.2)
       "@commitlint/config-conventional":
         specifier: ^19.6.0
         version: 19.6.0
@@ -32,8 +32,8 @@ importers:
         specifier: ^9.1.7
         version: 9.1.7
       lint-staged:
-        specifier: ^15.2.11
-        version: 15.2.11
+        specifier: ^15.3.0
+        version: 15.3.0
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
@@ -63,10 +63,10 @@ packages:
       }
     engines: { node: ">=6.9.0" }
 
-  "@commitlint/cli@19.6.0":
+  "@commitlint/cli@19.6.1":
     resolution:
       {
-        integrity: sha512-v17BgGD9w5KnthaKxXnEg6KLq6DYiAxyiN44TpiRtqyW8NSq+Kx99mkEG8Qo6uu6cI5eMzMojW2muJxjmPnF8w==,
+        integrity: sha512-8hcyA6ZoHwWXC76BoC8qVOSr8xHy00LZhZpauiD0iO0VYbVhMnED0da85lTfIULxl7Lj4c6vZgF0Wu/ed1+jlQ==,
       }
     engines: { node: ">=v18" }
     hasBin: true
@@ -124,6 +124,13 @@ packages:
     resolution:
       {
         integrity: sha512-INOUhkL/qaKqwcTUvCE8iIUf5XHsEPCLY9looJ/ipzi7jtGhgmtH7OOFiNvwYgH7mA8osUWOUDV8t4E2HAi4xA==,
+      }
+    engines: { node: ">=v18" }
+
+  "@commitlint/load@19.6.1":
+    resolution:
+      {
+        integrity: sha512-kE4mRKWWNju2QpsCWt428XBvUH55OET2N4QKQ0bF85qS/XbsRGG1MiTByDNlEVpEPceMkDr46LNH95DtRwcsfA==,
       }
     engines: { node: ">=v18" }
 
@@ -637,6 +644,13 @@ packages:
       }
     engines: { node: ^12.17.0 || ^14.13 || >=16.0.0 }
 
+  chalk@5.4.1:
+    resolution:
+      {
+        integrity: sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w==,
+      }
+    engines: { node: ^12.17.0 || ^14.13 || >=16.0.0 }
+
   character-entities-legacy@1.1.4:
     resolution:
       {
@@ -846,6 +860,17 @@ packages:
       "@types/node": "*"
       cosmiconfig: ">=8.2"
       typescript: ">=4"
+
+  cosmiconfig-typescript-loader@6.1.0:
+    resolution:
+      {
+        integrity: sha512-tJ1w35ZRUiM5FeTzT7DtYWAFFv37ZLqSRkGi2oeCK1gPhvaWjkAtfXvLmvE1pRfxxp9aQo6ba/Pvg1dKj05D4g==,
+      }
+    engines: { node: ">=v18" }
+    peerDependencies:
+      "@types/node": "*"
+      cosmiconfig: ">=9"
+      typescript: ">=5"
 
   cosmiconfig@9.0.0:
     resolution:
@@ -1977,6 +2002,13 @@ packages:
       }
     hasBin: true
 
+  jiti@2.4.2:
+    resolution:
+      {
+        integrity: sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==,
+      }
+    hasBin: true
+
   js-tokens@4.0.0:
     resolution:
       {
@@ -2043,10 +2075,10 @@ packages:
         integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==,
       }
 
-  lint-staged@15.2.11:
+  lint-staged@15.3.0:
     resolution:
       {
-        integrity: sha512-Ev6ivCTYRTGs9ychvpVw35m/bcNDuBN+mnTeObCL5h+boS5WzBEC6LHI4I9F/++sZm1m+J2LEiy0gxL/R9TBqQ==,
+        integrity: sha512-vHFahytLoF2enJklgtOtCtIjZrKD/LoxlaUusd5nh7dWv/dkKQJY74ndFSzxCdv7g0ueGg1ORgTSt4Y9LPZn9A==,
       }
     engines: { node: ">=18.12.0" }
     hasBin: true
@@ -3171,10 +3203,10 @@ packages:
         integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==,
       }
 
-  tinyexec@0.3.1:
+  tinyexec@0.3.2:
     resolution:
       {
-        integrity: sha512-WiCJLEECkO18gwqIp6+hJg0//p23HXp4S+gGtAKu3mI2F2/sXC4FvHvXvB0zJVVaTPhx1/tOwdbRsa1sOBIKqQ==,
+        integrity: sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==,
       }
 
   tinyglobby@0.2.10:
@@ -3611,14 +3643,14 @@ snapshots:
     dependencies:
       regenerator-runtime: 0.14.1
 
-  "@commitlint/cli@19.6.0(@types/node@22.10.2)(typescript@5.2.2)":
+  "@commitlint/cli@19.6.1(@types/node@22.10.2)(typescript@5.2.2)":
     dependencies:
       "@commitlint/format": 19.5.0
       "@commitlint/lint": 19.6.0
-      "@commitlint/load": 19.5.0(@types/node@22.10.2)(typescript@5.2.2)
+      "@commitlint/load": 19.6.1(@types/node@22.10.2)(typescript@5.2.2)
       "@commitlint/read": 19.5.0
       "@commitlint/types": 19.5.0
-      tinyexec: 0.3.1
+      tinyexec: 0.3.2
       yargs: 17.7.2
     transitivePeerDependencies:
       - "@types/node"
@@ -3648,7 +3680,7 @@ snapshots:
   "@commitlint/format@19.5.0":
     dependencies:
       "@commitlint/types": 19.5.0
-      chalk: 5.3.0
+      chalk: 5.4.1
 
   "@commitlint/is-ignored@19.6.0":
     dependencies:
@@ -3677,6 +3709,23 @@ snapshots:
     transitivePeerDependencies:
       - "@types/node"
       - typescript
+    optional: true
+
+  "@commitlint/load@19.6.1(@types/node@22.10.2)(typescript@5.2.2)":
+    dependencies:
+      "@commitlint/config-validator": 19.5.0
+      "@commitlint/execute-rule": 19.5.0
+      "@commitlint/resolve-extends": 19.5.0
+      "@commitlint/types": 19.5.0
+      chalk: 5.4.1
+      cosmiconfig: 9.0.0(typescript@5.2.2)
+      cosmiconfig-typescript-loader: 6.1.0(@types/node@22.10.2)(cosmiconfig@9.0.0(typescript@5.2.2))(typescript@5.2.2)
+      lodash.isplainobject: 4.0.6
+      lodash.merge: 4.6.2
+      lodash.uniq: 4.5.0
+    transitivePeerDependencies:
+      - "@types/node"
+      - typescript
 
   "@commitlint/message@19.5.0": {}
 
@@ -3692,7 +3741,7 @@ snapshots:
       "@commitlint/types": 19.5.0
       git-raw-commits: 4.0.0
       minimist: 1.2.8
-      tinyexec: 0.3.1
+      tinyexec: 0.3.2
 
   "@commitlint/resolve-extends@19.5.0":
     dependencies:
@@ -4056,6 +4105,8 @@ snapshots:
 
   chalk@5.3.0: {}
 
+  chalk@5.4.1: {}
+
   character-entities-legacy@1.1.4: {}
 
   character-entities@1.2.4: {}
@@ -4176,6 +4227,14 @@ snapshots:
       "@types/node": 22.10.2
       cosmiconfig: 9.0.0(typescript@5.2.2)
       jiti: 1.21.6
+      typescript: 5.2.2
+    optional: true
+
+  cosmiconfig-typescript-loader@6.1.0(@types/node@22.10.2)(cosmiconfig@9.0.0(typescript@5.2.2))(typescript@5.2.2):
+    dependencies:
+      "@types/node": 22.10.2
+      cosmiconfig: 9.0.0(typescript@5.2.2)
+      jiti: 2.4.2
       typescript: 5.2.2
 
   cosmiconfig@9.0.0(typescript@5.2.2):
@@ -4879,9 +4938,12 @@ snapshots:
     optionalDependencies:
       "@pkgjs/parseargs": 0.11.0
 
-  jiti@1.21.6: {}
+  jiti@1.21.6:
+    optional: true
 
   jiti@2.4.1: {}
+
+  jiti@2.4.2: {}
 
   js-tokens@4.0.0: {}
 
@@ -4913,9 +4975,9 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  lint-staged@15.2.11:
+  lint-staged@15.3.0:
     dependencies:
-      chalk: 5.3.0
+      chalk: 5.4.1
       commander: 12.1.0
       debug: 4.4.0
       execa: 8.0.1
@@ -5602,7 +5664,7 @@ snapshots:
 
   through@2.3.8: {}
 
-  tinyexec@0.3.1: {}
+  tinyexec@0.3.2: {}
 
   tinyglobby@0.2.10:
     dependencies:

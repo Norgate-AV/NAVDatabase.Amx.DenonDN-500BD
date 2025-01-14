@@ -1,5 +1,6 @@
 {
-    "name": "NAVDatabase.Amx.DenonDN-500AV",
+    "name": "navdatabase.amx.denondn-500bd",
+    "displayName": "NAVDatabase.Amx.DenonDN-500BD",
     "version": "1.0.0",
     "keywords": [
         "amx",
@@ -10,18 +11,18 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Norgate-AV/NAVDatabase.Amx.DenonDN-500AV.git"
+        "url": "https://github.com/Norgate-AV/NAVDatabase.Amx.DenonDN-500BD.git"
     },
     "bugs": {
-        "url": "https://github.com/Norgate-AV/NAVDatabase.Amx.DenonDN-500AV/issues"
+        "url": "https://github.com/Norgate-AV/NAVDatabase.Amx.DenonDN-500BD/issues"
     },
     "engines": {
-        "node": ">=14"
+        "node": ">=20"
     },
     "scripts": {
         "build": "pwsh ./build.ps1",
         "commit": "git-cz",
-        "prepare": "husky install",
+        "prepare": "husky",
         "pretty:fix": "prettier --write .",
         "doctoc": "doctoc README.md",
         "contrib:add": "all-contributors add",
@@ -31,7 +32,7 @@
         "analyze": "size-limit --why"
     },
     "devDependencies": {
-        "@commitlint/cli": "^19.6.0",
+        "@commitlint/cli": "^19.6.1",
         "@commitlint/config-conventional": "^19.6.0",
         "@norgate-av/genlinx": "^2.6.1",
         "all-contributors-cli": "^6.26.1",
@@ -39,7 +40,7 @@
         "cz-conventional-changelog": "3.3.0",
         "doctoc": "^2.2.1",
         "husky": "^9.1.7",
-        "lint-staged": "^15.2.11",
+        "lint-staged": "^15.3.0",
         "prettier": "^3.4.2",
         "size-limit": "^11.1.6"
     }
