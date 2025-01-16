@@ -184,6 +184,7 @@ function Update-GenlinxRc {
     param (
         [string]$Path,
         [string]$OutDir,
+        [string]$DependencyOwner,
         [string]$DependencyUrl,
         [string]$DependencyVersion
     )
@@ -199,8 +200,8 @@ function Update-GenlinxRc {
 
     $genlinxrc = Get-Content -Path $Path -Raw | & $convertFrom
 
-    $genlinxrc.build.nlrc.includePath += "./$OutDir/$DependencyUrl/$DependencyVersion"
-    $genlinxrc.build.nlrc.modulePath += "./$OutDir/$DependencyUrl/$DependencyVersion"
+    $genlinxrc.build.nlrc.includePath += "./$OutDir/$DependencyOwner/$DependencyUrl/$DependencyVersion"
+    $genlinxrc.build.nlrc.modulePath += "./$OutDir/$DependencyOwner/$DependencyUrl/$DependencyVersion"
 
     # Ensure the paths are unique
     $genlinxrc.build.nlrc.includePath = @($genlinxrc.build.nlrc.includePath | Select-Object -Unique)
@@ -424,6 +425,7 @@ try {
             Update-Genlinxrc `
                 -Path $genlinxrc `
                 -OutDir $OutDir `
+                -DependencyOwner $repoInfo.Owner `
                 -DependencyUrl $repoInfo.Repo `
                 -DependencyVersion $version
         }
