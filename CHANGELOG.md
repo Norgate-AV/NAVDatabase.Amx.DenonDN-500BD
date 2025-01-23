@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.2](https://github.com/Norgate-AV/NAVDatabase.Amx.DenonDN-500BD/compare/v1.0.1...v1.0.2) (2025-01-16)
+
+### 🐛 Bug Fixes
+
+- fix path update in install script ([c887bb2](https://github.com/Norgate-AV/NAVDatabase.Amx.DenonDN-500BD/commit/c887bb297aaa82002e5bf29406d9e2931149ef94))
+
 ## [1.0.1](https://github.com/Norgate-AV/NAVDatabase.Amx.DenonDN-500BD/compare/v1.0.0...v1.0.1) (2025-01-16)
 
 ### 🐛 Bug Fixes
