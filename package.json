@@ -32,16 +32,16 @@
         "analyze": "size-limit --why"
     },
     "devDependencies": {
-        "@commitlint/cli": "^19.6.1",
-        "@commitlint/config-conventional": "^19.6.0",
+        "@commitlint/cli": "^19.7.1",
+        "@commitlint/config-conventional": "^19.7.1",
         "@norgate-av/genlinx": "^2.6.1",
         "all-contributors-cli": "^6.26.1",
         "commitizen": "^4.3.1",
         "cz-conventional-changelog": "3.3.0",
         "doctoc": "^2.2.1",
         "husky": "^9.1.7",
-        "lint-staged": "^15.4.0",
-        "prettier": "^3.4.2",
+        "lint-staged": "^15.4.3",
+        "prettier": "^3.5.1",
         "size-limit": "^11.1.6"
     }
 }
