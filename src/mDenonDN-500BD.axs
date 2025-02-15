@@ -88,10 +88,12 @@ DEFINE_MUTUALLY_EXCLUSIVE
 (* EXAMPLE: DEFINE_CALL '<NAME>' (<PARAMETERS>) *)
 
 define_function SendString(char payload[]) {
-    NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
+    if (dvPort.NUMBER == 0) {
+        NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
                 NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_STRING_TO,
                                             dvPort,
                                             payload))
+    }
 
     send_string dvPort, "payload"
 }
@@ -201,10 +203,12 @@ data_event[dvPort] {
 
         CommunicationTimeOut(30)
 
-        NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
-                    NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_STRING_FROM,
-                                                data.device,
-                                                data.text))
+        if (data.device.number == 0) {
+            NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
+                        NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_STRING_FROM,
+                                                    data.device,
+                                                    data.text))
+        }
     }
     offline: {
         if (data.device.number == 0) {
@@ -228,11 +232,6 @@ data_event[dvPort] {
 data_event[vdvObject] {
     command: {
         stack_var _NAVSnapiMessage message
-
-        NAVErrorLog(NAV_LOG_LEVEL_DEBUG,
-                    NAVFormatStandardLogMessage(NAV_STANDARD_LOG_MESSAGE_TYPE_COMMAND_FROM,
-                                                data.device,
-                                                data.text))
 
         NAVParseSnapiMessage(data.text, message)
 
