@@ -27,21 +27,18 @@
         "doctoc": "doctoc README.md",
         "contrib:add": "all-contributors add",
         "contrib:generate": "all-contributors generate",
-        "contrib:check": "all-contributors check",
-        "size": "size-limit",
-        "analyze": "size-limit --why"
+        "contrib:check": "all-contributors check"
     },
     "devDependencies": {
-        "@commitlint/cli": "^19.7.1",
-        "@commitlint/config-conventional": "^19.7.1",
+        "@commitlint/cli": "^19.8.0",
+        "@commitlint/config-conventional": "^19.8.0",
         "@norgate-av/genlinx": "^2.6.1",
         "all-contributors-cli": "^6.26.1",
         "commitizen": "^4.3.1",
         "cz-conventional-changelog": "3.3.0",
         "doctoc": "^2.2.1",
         "husky": "^9.1.7",
-        "lint-staged": "^15.4.3",
-        "prettier": "^3.5.1",
-        "size-limit": "^11.1.6"
+        "lint-staged": "^15.5.0",
+        "prettier": "^3.5.3"
     }
 }
