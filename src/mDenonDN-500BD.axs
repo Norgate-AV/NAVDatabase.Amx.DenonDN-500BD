@@ -9,6 +9,8 @@ MODULE_NAME='mDenonDN-500BD'	(
 #DEFINE USING_NAV_MODULE_BASE_PASSTHRU_EVENT_CALLBACK
 #include 'NAVFoundation.ModuleBase.axi'
 #include 'NAVFoundation.SocketUtils.axi'
+#include 'NAVFoundation.TimelineUtils.axi'
+#include 'NAVFoundation.ErrorLogUtils.axi'
 
 /*
  _   _                       _          ___     __
@@ -69,7 +71,7 @@ DEFINE_TYPE
 (***********************************************************)
 DEFINE_VARIABLE
 
-volatile integer trayState
+volatile char trayState
 
 (***********************************************************)
 (*               LATCHING DEFINITIONS GO BELOW             *)
@@ -131,7 +133,10 @@ define_function NAVModulePropertyEventCallback(_NAVModulePropertyEvent event) {
         case NAV_MODULE_PROPERTY_EVENT_IP_ADDRESS: {
             module.Device.SocketConnection.Address = NAVTrimString(event.Args[1])
             module.Device.SocketConnection.Port = IP_PORT
-            NAVTimelineStart(TL_SOCKET_CHECK, TL_SOCKET_CHECK_INTERVAL, TIMELINE_ABSOLUTE, TIMELINE_REPEAT)
+            NAVTimelineStart(TL_SOCKET_CHECK,
+                            TL_SOCKET_CHECK_INTERVAL,
+                            TIMELINE_ABSOLUTE,
+                            TIMELINE_REPEAT)
         }
     }
 }
@@ -152,6 +157,7 @@ define_function NAVModulePassthruEventCallback(_NAVModulePassthruEvent event) {
 define_function Reset() {
     module.Device.SocketConnection.IsConnected = false
     module.Device.IsCommunicating = false
+    UpdateFeedback()
 
     NAVTimelineStop(TL_HEARTBEAT)
 }
@@ -161,10 +167,18 @@ define_function CommunicationTimeOut(integer timeout) {
     cancel_wait 'TimeOut'
 
     module.Device.IsCommunicating = true
+    UpdateFeedback()
 
     wait (timeout * 10) 'TimeOut' {
         module.Device.IsCommunicating = false
+        UpdateFeedback()
     }
+}
+
+
+define_function UpdateFeedback() {
+    [vdvObject, NAV_IP_CONNECTED]	= (module.Device.SocketConnection.IsConnected)
+    [vdvObject, DEVICE_COMMUNICATING] = (module.Device.IsCommunicating)
 }
 
 
@@ -193,10 +207,14 @@ data_event[dvPort] {
 
         if (data.device.number == 0) {
             module.Device.SocketConnection.IsConnected = true
+            UpdateFeedback()
             NAVErrorLog(NAV_LOG_LEVEL_DEBUG, "'mDenonDN-500BD => Socket Online'")
         }
 
-        NAVTimelineStart(TL_HEARTBEAT, TL_HEARTBEAT_INTERVAL, TIMELINE_ABSOLUTE, TIMELINE_REPEAT)
+        NAVTimelineStart(TL_HEARTBEAT,
+                        TL_HEARTBEAT_INTERVAL,
+                        TIMELINE_ABSOLUTE,
+                        TIMELINE_REPEAT)
     }
     string: {
         [vdvObject, DATA_INITIALIZED] = true
@@ -224,21 +242,6 @@ data_event[dvPort] {
 
             NAVErrorLog(NAV_LOG_LEVEL_ERROR,
                         "'mDenonDN-500BD => Socket Error: ', NAVGetSocketError(type_cast(data.number))")
-        }
-    }
-}
-
-
-data_event[vdvObject] {
-    command: {
-        stack_var _NAVSnapiMessage message
-
-        NAVParseSnapiMessage(data.text, message)
-
-        switch (message.Header) {
-            default: {
-
-            }
         }
     }
 }
@@ -287,12 +290,6 @@ timeline_event[TL_SOCKET_CHECK] { MaintainSocketConnection() }
 
 timeline_event[TL_HEARTBEAT] {
     SendString(BuildString('?VN'))
-}
-
-
-timeline_event[TL_NAV_FEEDBACK] {
-    [vdvObject, NAV_IP_CONNECTED]	= (module.Device.SocketConnection.IsConnected)
-    [vdvObject, DEVICE_COMMUNICATING] = (module.Device.IsCommunicating)
 }
 
 
