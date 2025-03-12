@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.0](https://github.com/Norgate-AV/NAVDatabase.Amx.DenonDN-500BD/compare/v1.1.0...v1.2.0) (2025-03-12)
+
+### 🌟 Features
+
+- update to support NAVFoundation.Amx v2.0.0 ([ae00656](https://github.com/Norgate-AV/NAVDatabase.Amx.DenonDN-500BD/commit/ae006568672e72e801db1e9b33f9b0e0520a08f5))
+
 ## [1.1.0](https://github.com/Norgate-AV/NAVDatabase.Amx.DenonDN-500BD/compare/v1.0.3...v1.1.0) (2025-02-17)
 
 ### 🌟 Features
