@@ -4,8 +4,6 @@ MODULE_NAME='mDenonDN-500BDUIArray'	(
                                     )
 
 (***********************************************************)
-#include 'NAVFoundation.ModuleBase.axi'
-#include 'NAVFoundation.UIUtils.axi'
 
 /*
  _   _                       _          ___     __

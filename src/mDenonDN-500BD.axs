@@ -71,6 +71,7 @@ DEFINE_TYPE
 (***********************************************************)
 DEFINE_VARIABLE
 
+volatile _NAVModule module
 volatile char trayState
 
 (***********************************************************)
@@ -186,7 +187,7 @@ define_function UpdateFeedback() {
 (*                STARTUP CODE GOES BELOW                  *)
 (***********************************************************)
 DEFINE_START {
-
+    NAVModuleInit(module)
 }
 
 (***********************************************************)
